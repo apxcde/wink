@@ -120,6 +120,11 @@ class WinkAuthor extends AbstractWinkModel implements Authenticatable
         return $this->password;
     }
 
+    public function getAuthPasswordName()
+    {
+        return 'password';
+    }
+
     /**
      * Get the token value for the "remember me" session.
      *
