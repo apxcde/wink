@@ -38,7 +38,7 @@ class MigrateCommand extends Command
 
         $this->call('migrate', [
             '--database' => config('wink.database_connection'),
-            '--path' => 'vendor/themsaid/wink/src/Migrations',
+            '--path' => 'vendor/apxcode/wink/src/Migrations',
             '--force' => $this->option('force') ?? true,
         ]);
 

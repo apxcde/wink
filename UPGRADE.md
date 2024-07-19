@@ -2,7 +2,7 @@
 
 ## Upgrading To 1.0 From 0.x
 
-Notice: The package name has changed from `writingink/wink` to `themsaid/wink`.
+Notice: The package name has changed from `writingink/wink` to `apxcode/wink`.
 
 To upgrade to version 1.0, you need to run the following commands
 
