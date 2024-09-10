@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateTables extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('wink_tags', function (Blueprint $table) {
@@ -64,11 +59,6 @@ class CreateTables extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('wink_tags');

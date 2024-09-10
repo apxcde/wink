@@ -92,7 +92,6 @@ return [
         */
 
         'default' => null,
-
     ],
 
     /*

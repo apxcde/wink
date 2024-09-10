@@ -10,12 +10,7 @@ use Wink\Http\Middleware\Authenticate;
 
 class WinkServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap any package services.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
         $this->registerRoutes();
         $this->registerAuthGuard();
@@ -26,12 +21,7 @@ class WinkServiceProvider extends ServiceProvider
         );
     }
 
-    /**
-     * Register the package routes.
-     *
-     * @return void
-     */
-    private function registerRoutes()
+    private function registerRoutes(): void
     {
         $middlewareGroup = config('wink.middleware_group');
 
@@ -57,12 +47,7 @@ class WinkServiceProvider extends ServiceProvider
             });
     }
 
-    /**
-     * Register the package's authentication guard.
-     *
-     * @return void
-     */
-    private function registerAuthGuard()
+    private function registerAuthGuard(): void
     {
         $this->app['config']->set('auth.providers.wink_authors', [
             'driver' => 'eloquent',
@@ -73,14 +58,11 @@ class WinkServiceProvider extends ServiceProvider
             'driver' => 'session',
             'provider' => 'wink_authors',
         ]);
+
+        $this->app['config']->set('session.driver', 'file');
     }
 
-    /**
-     * Register the package's publishable resources.
-     *
-     * @return void
-     */
-    private function registerPublishing()
+    private function registerPublishing(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -93,12 +75,7 @@ class WinkServiceProvider extends ServiceProvider
         }
     }
 
-    /**
-     * Register any package services.
-     *
-     * @return void
-     */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(
             __DIR__.'/../config/wink.php', 'wink'
