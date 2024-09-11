@@ -2,19 +2,15 @@
 
 namespace Wink\Http\Controllers;
 
-use Illuminate\Support\Facades\Hash;
+use Wink\WinkAuthor;
+use Glhd\Bits\Snowflake;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 use Wink\Http\Resources\TeamResource;
-use Wink\WinkAuthor;
 
 class TeamController
 {
-    /**
-     * Return posts.
-     *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection|\Illuminate\Http\JsonResponse
-     */
     public function index()
     {
         $entries = WinkAuthor::when(request()->has('search'), function ($q) {
@@ -27,18 +23,12 @@ class TeamController
         return TeamResource::collection($entries);
     }
 
-    /**
-     * Return a single post.
-     *
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function show($id = null)
     {
         if ($id === 'new') {
             return response()->json([
                 'entry' => WinkAuthor::make([
-                    'id' => Str::uuid(),
+                    'id' => Snowflake::make()->id(),
                 ]),
             ]);
         }
@@ -50,12 +40,6 @@ class TeamController
         ]);
     }
 
-    /**
-     * Store a single category.
-     *
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function store($id)
     {
         $data = [
@@ -95,12 +79,6 @@ class TeamController
         ]);
     }
 
-    /**
-     * Return a single author.
-     *
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse|null
-     */
     public function delete($id)
     {
         $entry = WinkAuthor::findOrFail($id);

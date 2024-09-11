@@ -8,21 +8,11 @@ use Illuminate\Validation\ValidationException;
 
 class LoginController
 {
-    /**
-     * Show the application's login form.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function showLoginForm()
     {
         return view('wink::login');
     }
 
-    /**
-     * Attempt to log in.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function login()
     {
         validator(request()->all(), [
@@ -42,12 +32,6 @@ class LoginController
         ]);
     }
 
-    /**
-     * Log the user out of the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function logout(Request $request)
     {
         $this->guard()->logout();
@@ -57,11 +41,6 @@ class LoginController
         return redirect()->route('wink.auth.login')->with('loggedOut', true);
     }
 
-    /**
-     * Get the guard to be used during authentication.
-     *
-     * @return \Illuminate\Contracts\Auth\StatefulGuard
-     */
     protected function guard()
     {
         return Auth::guard('wink');

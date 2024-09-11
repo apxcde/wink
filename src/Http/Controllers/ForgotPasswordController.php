@@ -2,30 +2,21 @@
 
 namespace Wink\Http\Controllers;
 
-use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 use Throwable;
-use Wink\Mail\ResetPasswordEmail;
 use Wink\WinkAuthor;
+use Illuminate\Support\Str;
+use Wink\Mail\ResetPasswordEmail;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class ForgotPasswordController extends Controller
 {
-    /**
-     * Show the reset-password form.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function showResetRequestForm()
     {
         return view('wink::request-password-reset');
     }
 
-    /**
-     * Send password reset email.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function sendResetLinkEmail()
     {
         validator(request()->all(), [
@@ -45,12 +36,6 @@ class ForgotPasswordController extends Controller
         return redirect()->route('wink.password.forgot')->with('sent', true);
     }
 
-    /**
-     * Show the new password to the user.
-     *
-     * @param  string  $token
-     * @return \Illuminate\Http\Response
-     */
     public function showNewPassword($token)
     {
         try {
@@ -69,7 +54,7 @@ class ForgotPasswordController extends Controller
 
         cache()->forget('password.reset.'.$authorId);
 
-        $author->password = \Hash::make($password = Str::random());
+        $author->password = Hash::make($password = Str::random());
 
         $author->save();
 
