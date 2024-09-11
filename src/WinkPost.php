@@ -3,7 +3,6 @@
 namespace Wink;
 
 use DateTimeInterface;
-use Glhd\Bits\Snowflake;
 use Illuminate\Support\HtmlString;
 use Glhd\Bits\Database\HasSnowflakes;
 use Illuminate\Contracts\Database\Eloquent\Builder;

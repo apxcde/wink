@@ -2,20 +2,18 @@
 
 namespace Wink\Http\Controllers;
 
+use Glhd\Bits\Snowflake;
+use Wink\WinkTag;
+use Wink\WinkPost;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Http\JsonResponse;
 use Wink\Http\Resources\PostsResource;
-use Wink\WinkPost;
-use Wink\WinkTag;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PostsController
 {
-    /**
-     * Return posts.
-     *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection|\Illuminate\Http\JsonResponse
-     */
-    public function index()
+    public function index(): JsonResponse|AnonymousResourceCollection
     {
         $entries = WinkPost::when(request()->has('search'), function ($q) {
             $q->where('title', 'LIKE', '%'.request('search').'%');
@@ -35,18 +33,12 @@ class PostsController
         return PostsResource::collection($entries);
     }
 
-    /**
-     * Return a single post.
-     *
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function show($id = null)
+    public function show($id = null): JsonResponse
     {
         if ($id === 'new') {
             return response()->json([
                 'entry' => WinkPost::make([
-                    'id' => Str::uuid(),
+                    'id' => Snowflake::make()->id(),
                     'publish_date' => now()->format('Y-m-d H:i:00'),
                     'markdown' => null,
                 ]),
@@ -60,13 +52,7 @@ class PostsController
         ]);
     }
 
-    /**
-     * Store a single post.
-     *
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function store($id)
+    public function store($id): JsonResponse
     {
         $data = [
             'title' => request('title'),
@@ -104,13 +90,7 @@ class PostsController
         ]);
     }
 
-    /**
-     * Tags incoming from the request.
-     *
-     * @param  array  $incomingTags
-     * @return array
-     */
-    private function collectTags($incomingTags)
+    private function collectTags($incomingTags): array
     {
         $allTags = WinkTag::all();
 
@@ -129,13 +109,7 @@ class PostsController
         })->toArray();
     }
 
-    /**
-     * Return a single post.
-     *
-     * @param  string  $id
-     * @return void
-     */
-    public function delete($id)
+    public function delete($id): void
     {
         $entry = WinkPost::findOrFail($id);
 
