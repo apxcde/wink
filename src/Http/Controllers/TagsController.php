@@ -2,18 +2,14 @@
 
 namespace Wink\Http\Controllers;
 
+use Wink\WinkTag;
+use Glhd\Bits\Snowflake;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Wink\Http\Resources\TagsResource;
-use Wink\WinkTag;
 
 class TagsController
 {
-    /**
-     * Return posts.
-     *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection|\Illuminate\Http\JsonResponse
-     */
     public function index()
     {
         $entries = WinkTag::when(request()->has('search'), function ($q) {
@@ -26,18 +22,12 @@ class TagsController
         return TagsResource::collection($entries);
     }
 
-    /**
-     * Return a single post.
-     *
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function show($id = null)
     {
         if ($id === 'new') {
             return response()->json([
                 'entry' => WinkTag::make([
-                    'id' => Str::uuid(),
+                    'id' => Snowflake::make()->id(),
                 ]),
             ]);
         }

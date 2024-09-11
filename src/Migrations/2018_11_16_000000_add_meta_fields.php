@@ -6,12 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class AddMetaFields extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
+    public function up(): void
     {
         Schema::table('wink_tags', function (Blueprint $table) {
             $table->text('meta')->nullable();
@@ -30,12 +25,7 @@ class AddMetaFields extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
+    public function down(): void
     {
         Schema::table('wink_tags', function (Blueprint $table) {
             $table->dropColumn('meta');

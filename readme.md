@@ -1,3 +1,7 @@
+
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/apxcde/wink.svg?style=flat-square)](https://packagist.org/packages/apxcde/wink)
+[![Total Downloads](https://img.shields.io/packagist/dt/apxcde/wink.svg?style=flat-square)](https://packagist.org/packages/apxcde/wink)
+
 <p align="center"><img src="/art/header.png?1" alt="wink logo"></p>
 
 Wink adds a nice UI where you can manage a publication of any size with posts, pages, tags, and authors.

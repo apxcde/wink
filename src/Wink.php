@@ -4,12 +4,7 @@ namespace Wink;
 
 class Wink
 {
-    /**
-     * Get the default JavaScript variables for Wink.
-     *
-     * @return array
-     */
-    public static function scriptVariables()
+    public static function scriptVariables(): array
     {
         return [
             'unsplash_key' => config('services.unsplash.key'),

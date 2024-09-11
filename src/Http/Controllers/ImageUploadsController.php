@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageUploadsController
 {
-    /**
-     * Upload a new image.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function upload()
     {
         $path = request()->image->store(config('wink.storage_path'), [
