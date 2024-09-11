@@ -20,7 +20,7 @@ class WinkAuthor extends AbstractWinkModel implements Authenticatable
     protected $rememberTokenName = 'remember_token';
 
     protected $casts = [
-        'id' => Snowflake::class,
+        // 'id' => Snowflake::class,
         'meta' => 'array',
     ];
 

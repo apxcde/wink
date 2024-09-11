@@ -17,8 +17,8 @@ class CreateTables extends Migration
         });
 
         Schema::create('wink_posts_tags', function (Blueprint $table) {
-            $table->uuid('post_id');
-            $table->uuid('tag_id');
+            $table->foreignId('post_id');
+            $table->foreignId('tag_id');
             $table->unique(['post_id', 'tag_id']);
         });
 
