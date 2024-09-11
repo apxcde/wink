@@ -3,8 +3,9 @@
 namespace Wink;
 
 use DateTimeInterface;
-use Glhd\Bits\Database\HasSnowflakes;
+use Glhd\Bits\Snowflake;
 use Illuminate\Support\HtmlString;
+use Glhd\Bits\Database\HasSnowflakes;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
@@ -17,8 +18,6 @@ class WinkPost extends AbstractWinkModel
     protected $guarded = [];
 
     protected $table = 'wink_posts';
-
-    public $incrementing = false;
 
     protected $casts = [
         'id' => Snowflake::class,
