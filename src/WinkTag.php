@@ -15,7 +15,7 @@ class WinkTag extends AbstractWinkModel
     protected $table = 'wink_tags';
 
     protected $casts = [
-        // 'id' => Snowflake::class,
+        'id' => 'string',
         'meta' => 'array',
     ];
 

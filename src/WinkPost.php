@@ -20,7 +20,7 @@ class WinkPost extends AbstractWinkModel
     protected $table = 'wink_posts';
 
     protected $casts = [
-        // 'id' => Snowflake::class,
+        'id' => 'string',
         'meta' => 'array',
         'published' => 'boolean',
         'markdown' => 'boolean',

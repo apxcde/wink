@@ -14,7 +14,7 @@ class WinkPage extends AbstractWinkModel
     protected $table = 'wink_pages';
 
     protected $casts = [
-        // 'id' => Snowflake::class,
+        'id' => 'string',
         'body' => 'string',
         'meta' => 'array',
     ];
