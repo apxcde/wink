@@ -2,80 +2,29 @@
 
 namespace Wink;
 
-use Carbon\CarbonInterface;
-use Illuminate\Support\Collection;
+use Glhd\Bits\Database\HasSnowflakes;
+use Glhd\Bits\Snowflake;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-/**
- * @property string $id
- * @property string $slug
- * @property string $name
- * @property CarbonInterface $updated_at
- * @property CarbonInterface $created_at
- * @property array<mixed>|null $meta
- * @property-read Collection<WinkPost> $posts
- */
 class WinkTag extends AbstractWinkModel
 {
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
+    use HasSnowflakes;
+
     protected $guarded = [];
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'wink_tags';
 
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'id';
-
-    /**
-     * The "type" of the auto-incrementing ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
-     * The attributes that should be casted.
-     *
-     * @var array
-     */
     protected $casts = [
+        'id' => Snowflake::class,
         'meta' => 'array',
     ];
 
-    /**
-     * The posts that has the tag.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function posts()
+    public function posts(): BelongsToMany
     {
         return $this->belongsToMany(WinkPost::class, 'wink_posts_tags', 'tag_id', 'post_id');
     }
 
-    /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 

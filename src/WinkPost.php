@@ -2,106 +2,43 @@
 
 namespace Wink;
 
-use Carbon\CarbonInterface;
 use DateTimeInterface;
-use Illuminate\Database\Eloquent\Collection;
+use Glhd\Bits\Database\HasSnowflakes;
 use Illuminate\Support\HtmlString;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-/**
- * @property string $id
- * @property string $slug
- * @property string $title
- * @property string $excerpt
- * @property-write string $body
- * @property-read HtmlString|string $content
- * @property bool $published
- * @property CarbonInterface $publish_date
- * @property string|null $featured_image
- * @property string $featured_image_caption
- * @property string $author_id
- * @property CarbonInterface $updated_at
- * @property CarbonInterface $created_at
- * @property array<mixed>|null $meta
- * @property bool $markdown
- * @property-read WinkAuthor $author
- * @property-read Collection<WinkTag> $tags
- */
 class WinkPost extends AbstractWinkModel
 {
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
+    use HasSnowflakes;
+
     protected $guarded = [];
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'wink_posts';
 
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'id';
-
-    /**
-     * The "type" of the auto-incrementing ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
     public $incrementing = false;
 
-    /**
-     * The attributes that should be casted.
-     *
-     * @var array
-     */
     protected $casts = [
+        'id' => Snowflake::class,
         'meta' => 'array',
         'published' => 'boolean',
         'markdown' => 'boolean',
         'publish_date' => 'datetime',
     ];
 
-    /**
-     * The tags the post belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function tags()
+    public function tags(): BelongsToMany
     {
         return $this->belongsToMany(WinkTag::class, 'wink_posts_tags', 'post_id', 'tag_id');
     }
 
-    /**
-     * The post author.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function author()
+    public function author(): BelongsTo
     {
         return $this->belongsTo(WinkAuthor::class, 'author_id');
     }
 
-    /**
-     * Get the renderable post content.
-     *
-     * @return HtmlString|string
-     */
-    public function getContentAttribute()
+    public function getContentAttribute(): HtmlString|string
     {
         if (! $this->markdown) {
             return $this->body;
@@ -114,95 +51,44 @@ class WinkPost extends AbstractWinkModel
         return new HtmlString($converter->convertToHtml($this->body));
     }
 
-    /**
-     * Scope a query to only include published posts.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopePublished($query)
+    public function scopePublished(Builder $query): Builder
     {
         return $query->where('published', true);
     }
 
-    /**
-     * Scope a query to only include drafts (unpublished posts).
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeDraft($query)
+    public function scopeDraft(Builder $query): Builder
     {
         return $query->where('published', false);
     }
 
-    /**
-     * Scope a query to only include posts whose publish date is in the past (or now).
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeLive($query)
+    public function scopeLive(Builder $query): Builder
     {
         return $query->published()->where('publish_date', '<=', now());
     }
 
-    /**
-     * Scope a query to only include posts whose publish date is in the future.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeScheduled($query)
+    public function scopeScheduled(Builder $query): Builder
     {
         return $query->where('publish_date', '>', now());
     }
 
-    /**
-     * Scope a query to only include posts whose publish date is before a given date.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $date
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeBeforePublishDate($query, $date)
+    public function scopeBeforePublishDate(Builder $query, string $date): Builder
     {
         return $query->where('publish_date', '<=', $date);
     }
 
-    /**
-     * Scope a query to only include posts whose publish date is after a given date.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $date
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeAfterPublishDate($query, $date)
+    public function scopeAfterPublishDate(Builder $query, string $date): Builder
     {
         return $query->where('publish_date', '>', $date);
     }
 
-    /**
-     * Scope a query to only include posts that have a specific tag (by slug).
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $slug
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeTag($query, string $slug)
+    public function scopeTag(Builder $query, string $slug): Builder
     {
         return $query->whereHas('tags', function ($query) use ($slug) {
             $query->where('slug', $slug);
         });
     }
 
-    /**
-     * Prepare a date for array / JSON serialization.
-     *
-     * @param  \DateTimeInterface  $date
-     * @return string
-     */
-    protected function serializeDate(DateTimeInterface $date)
+    protected function serializeDate(DateTimeInterface $date): string
     {
         return $date->format('Y-m-d H:i:s');
     }

@@ -58,8 +58,6 @@ class WinkServiceProvider extends ServiceProvider
             'driver' => 'session',
             'provider' => 'wink_authors',
         ]);
-
-        $this->app['config']->set('session.driver', 'file');
     }
 
     private function registerPublishing(): void

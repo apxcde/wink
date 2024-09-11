@@ -6,24 +6,14 @@ use Illuminate\Support\Facades\Schema;
 
 class AddMarkdownField extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
+    public function up(): void
     {
         Schema::table('wink_posts', function (Blueprint $table) {
             $table->boolean('markdown')->default(false);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
+    public function down(): void
     {
         Schema::table('wink_posts', function (Blueprint $table) {
             $table->boolean('markdown')->default(false);

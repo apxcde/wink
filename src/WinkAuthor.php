@@ -2,45 +2,29 @@
 
 namespace Wink;
 
-use Carbon\CarbonInterface;
+use Glhd\Bits\Snowflake;
+use Glhd\Bits\Database\HasSnowflakes;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-/**
- * @property string $id
- * @property string $slug
- * @property string $name
- * @property string $email
- * @property string $password
- * @property string $bio
- * @property string $avatar
- * @property string|null $remember_token
- * @property CarbonInterface $updated_at
- * @property CarbonInterface $created_at
- * @property array<mixed>|null $meta
- * @property-read Collection<WinkPost> $posts
- */
 class WinkAuthor extends AbstractWinkModel implements Authenticatable
 {
+    use HasSnowflakes;
+
     protected $guarded = [];
 
     protected $hidden = ['password', 'remember_token'];
 
     protected $table = 'wink_authors';
 
-    protected $primaryKey = 'id';
-
-    protected $keyType = 'string';
-
-    public $incrementing = false;
-
     protected $rememberTokenName = 'remember_token';
 
     protected $casts = [
+        'id' => Snowflake::class,
         'meta' => 'array',
     ];
 
-    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function posts(): HasMany
     {
         return $this->hasMany(WinkPost::class, 'author_id');
     }
